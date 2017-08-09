@@ -83,7 +83,7 @@ class Refund extends Base
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
 
         $response = $this->_processPost()->getData(CASE_LOWER);
-        if ((empty($response['ipc_trnref']) || $response['ipc_trnref'] != $this->getTrnref()) || (empty($response['amount']) || $response['amount'] != $this->getAmount()) || (empty($response['currency']) || $response['currency'] != $this->getCurrency()) || $response['status'] != Defines::STATUS_SUCCESS) {
+        if (empty($response['ipc_trnref']) || (empty($response['amount']) || $response['amount'] != $this->getAmount()) || (empty($response['currency']) || $response['currency'] != $this->getCurrency()) || $response['status'] != Defines::STATUS_SUCCESS) {
             return false;
         }
 
