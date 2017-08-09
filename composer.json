@@ -9,8 +9,8 @@
     "php": ">=5.4.8"
   },
   "autoload": {
-    "psr-0": {
-      "Mypos\\IPC": "IPC/"
+    "psr-4": {
+      "Mypos\\IPC\\": "IPC/"
     }
   }
 }
