@@ -126,7 +126,7 @@ class Purchase extends Base
         $this->_addPostParam('SID', $this->getCnf()->getSid());
         $this->_addPostParam('WalletNumber', $this->getCnf()->getWallet());
         $this->_addPostParam('KeyIndex', $this->getCnf()->getKeyIndex());
-        $this->_addPostParam('Source', Defines::SOURCE_PARAM);
+        $this->_addPostParam('Source', $this->getCnf()->getSource());
 
         $this->_addPostParam('Currency', $this->getCurrency());
         if (!$this->isNoCartPurchase()) {
@@ -138,7 +138,9 @@ class Purchase extends Base
         $this->_addPostParam('URL_Cancel', $this->getUrlCancel());
         $this->_addPostParam('URL_Notify', $this->getUrlNotify());
 
-        if ($this->getPaymentParametersRequired() == self::PURCHASE_TYPE_FULL) {
+        $this->_addPostParam('Note', $this->getNote());
+
+        if ($this->getPaymentParametersRequired() != self::PURCHASE_TYPE_SIMPLIFIED_PAYMENT_PAGE) {
             $this->_addPostParam('customeremail', $this->getCustomer()->getEmail());
             $this->_addPostParam('customerphone', $this->getCustomer()->getPhone());
             $this->_addPostParam('customerfirstnames', $this->getCustomer()->getFirstName());
@@ -150,11 +152,9 @@ class Purchase extends Base
         }
 
         if ($this->getPaymentParametersRequired() != self::PURCHASE_TYPE_SIMPLIFIED_CALL) {
-            $this->_addPostParam('Note', $this->getNote());
             if (!$this->isNoCartPurchase()) {
                 $this->_addPostParam('CartItems', $this->cart->getItemsCount());
                 $items = $this->cart->getCart();
-
                 $i = 1;
                 foreach ($items as $v) {
                     $this->_addPostParam('Article_'.$i, $v['name']);
@@ -232,6 +232,9 @@ class Purchase extends Base
 
         if ($this->getPaymentParametersRequired() == self::PURCHASE_TYPE_FULL) {
             try {
+                if (!$this->getCustomer()) {
+                    throw new IPC_Exception('Customer details not set!');
+                }
                 $this->getCustomer()->validate($this->getPaymentParametersRequired());
             } catch (\Exception $ex) {
                 throw new IPC_Exception('Invalid Customer details: '.$ex->getMessage());

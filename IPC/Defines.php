@@ -36,7 +36,6 @@ class Defines
     const STATUS_TRANSACTION_DECLINED = 21;
     const STATUS_UNDEFINED_ERROR = 99;
     const ENCRYPT_PADDING = OPENSSL_PKCS1_PADDING;
-    const SOURCE_PARAM = 'SDK_PHP_1.3';
 
     private function __construct() { }
 }

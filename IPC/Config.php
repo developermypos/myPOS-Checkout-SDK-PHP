@@ -17,6 +17,7 @@ class Config
     private $version = '1.3';
     private $ipc_url = 'https://www.mypos.eu/vmp/checkout';
     private $developerKey;
+    private $source = 'SDK_PHP_1.3';
 
     /**
      * Store private RSA key as a filepath
@@ -166,6 +167,24 @@ class Config
         $this->developerKey = $developerKey;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * Additional parameter to specify the source of request
+     *
+     * @param string $source
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
     }
 
     /**

@@ -30,7 +30,7 @@ class GetTxnStatus extends Base
         $this->_addPostParam('SID', $this->getCnf()->getSid());
         $this->_addPostParam('WalletNumber', $this->getCnf()->getWallet());
         $this->_addPostParam('KeyIndex', $this->getCnf()->getKeyIndex());
-        $this->_addPostParam('Source', Defines::SOURCE_PARAM);
+        $this->_addPostParam('Source', $this->getCnf()->getSource());
 
         $this->_addPostParam('OrderID', $this->getOrderID());
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
