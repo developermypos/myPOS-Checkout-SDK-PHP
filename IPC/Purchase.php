@@ -151,19 +151,17 @@ class Purchase extends Base
             $this->_addPostParam('customeraddress', $this->getCustomer()->getAddress());
         }
 
-        if ($this->getPaymentParametersRequired() != self::PURCHASE_TYPE_SIMPLIFIED_CALL) {
-            if (!$this->isNoCartPurchase()) {
-                $this->_addPostParam('CartItems', $this->cart->getItemsCount());
-                $items = $this->cart->getCart();
-                $i = 1;
-                foreach ($items as $v) {
-                    $this->_addPostParam('Article_'.$i, $v['name']);
-                    $this->_addPostParam('Quantity_'.$i, $v['quantity']);
-                    $this->_addPostParam('Price_'.$i, $v['price']);
-                    $this->_addPostParam('Amount_'.$i, $v['price'] * $v['quantity']);
-                    $this->_addPostParam('Currency_'.$i, $this->getCurrency());
-                    $i++;
-                }
+        if (!$this->isNoCartPurchase()) {
+            $this->_addPostParam('CartItems', $this->cart->getItemsCount());
+            $items = $this->cart->getCart();
+            $i = 1;
+            foreach ($items as $v) {
+                $this->_addPostParam('Article_'.$i, $v['name']);
+                $this->_addPostParam('Quantity_'.$i, $v['quantity']);
+                $this->_addPostParam('Price_'.$i, $v['price']);
+                $this->_addPostParam('Amount_'.$i, $v['price'] * $v['quantity']);
+                $this->_addPostParam('Currency_'.$i, $this->getCurrency());
+                $i++;
             }
         }
 
