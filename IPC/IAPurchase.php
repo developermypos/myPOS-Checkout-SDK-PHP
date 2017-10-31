@@ -127,7 +127,7 @@ class IAPurchase extends Base
      */
     public function validate()
     {
-        if ($this->getCurrency() === null || strpos(Defines::AVL_CURRENCIES, $this->getCurrency()) === false) {
+        if ($this->getCurrency() === null) {
             throw new IPC_Exception('Invalid currency');
         }
 

@@ -70,18 +70,6 @@ class Helper
     }
 
     /**
-     * Validate if currency is acceptable by API
-     *
-     * @param string $currency ISO 4217 code
-     *
-     * @return boolean
-     */
-    public static function isValidCurrency($currency)
-    {
-        return in_array(strtoupper($currency), explode(';', Defines::AVL_CURRENCIES));
-    }
-
-    /**
      * Validate quantity
      *
      * @param int $quantity

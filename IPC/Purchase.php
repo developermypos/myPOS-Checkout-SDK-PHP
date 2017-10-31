@@ -156,11 +156,11 @@ class Purchase extends Base
             $items = $this->cart->getCart();
             $i = 1;
             foreach ($items as $v) {
-                $this->_addPostParam('Article_'.$i, $v['name']);
-                $this->_addPostParam('Quantity_'.$i, $v['quantity']);
-                $this->_addPostParam('Price_'.$i, $v['price']);
-                $this->_addPostParam('Amount_'.$i, $v['price'] * $v['quantity']);
-                $this->_addPostParam('Currency_'.$i, $this->getCurrency());
+                $this->_addPostParam('Article_' . $i, $v['name']);
+                $this->_addPostParam('Quantity_' . $i, $v['quantity']);
+                $this->_addPostParam('Price_' . $i, $v['price']);
+                $this->_addPostParam('Amount_' . $i, $v['price'] * $v['quantity']);
+                $this->_addPostParam('Currency_' . $i, $this->getCurrency());
                 $i++;
             }
         }
@@ -210,21 +210,21 @@ class Purchase extends Base
             throw new IPC_Exception('Invalid value provided for PaymentParametersRequired params');
         }
 
-        if ($this->getCurrency() === null || strpos(Defines::AVL_CURRENCIES, $this->getCurrency()) === false) {
+        if ($this->getCurrency() === null) {
             throw new IPC_Exception('Invalid currency');
         }
 
         try {
             $this->getCnf()->validate();
         } catch (\Exception $ex) {
-            throw new IPC_Exception('Invalid Config details: '.$ex->getMessage());
+            throw new IPC_Exception('Invalid Config details: ' . $ex->getMessage());
         }
 
         if (!$this->isNoCartPurchase()) {
             try {
                 $this->getCart()->validate();
             } catch (\Exception $ex) {
-                throw new IPC_Exception('Invalid Cart details: '.$ex->getMessage());
+                throw new IPC_Exception('Invalid Cart details: ' . $ex->getMessage());
             }
         }
 
@@ -235,7 +235,7 @@ class Purchase extends Base
                 }
                 $this->getCustomer()->validate($this->getPaymentParametersRequired());
             } catch (\Exception $ex) {
-                throw new IPC_Exception('Invalid Customer details: '.$ex->getMessage());
+                throw new IPC_Exception('Invalid Customer details: ' . $ex->getMessage());
             }
         }
 

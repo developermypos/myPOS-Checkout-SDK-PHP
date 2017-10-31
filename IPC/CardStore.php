@@ -55,10 +55,8 @@ abstract class CardStore extends Base
             throw new IPC_Exception('Invalid card verification');
         }
 
-        if ($this->getCardVerification() == self::CARD_VERIFICATION_YES) {
-            if ($this->getCurrency() === null || strpos(Defines::AVL_CURRENCIES, $this->getCurrency()) === false) {
-                throw new IPC_Exception('Invalid currency');
-            }
+        if ($this->getCardVerification() == self::CARD_VERIFICATION_YES && $this->getCurrency() === null) {
+            throw new IPC_Exception('Invalid currency');
         }
 
         return true;

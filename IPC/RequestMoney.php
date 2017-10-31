@@ -133,7 +133,7 @@ class RequestMoney extends Base
             throw new IPC_Exception('Invalid Amount');
         }
 
-        if ($this->getCurrency() == null || !Helper::isValidCurrency($this->getCurrency())) {
+        if ($this->getCurrency() == null) {
             throw new IPC_Exception('Invalid Currency');
         }
 
