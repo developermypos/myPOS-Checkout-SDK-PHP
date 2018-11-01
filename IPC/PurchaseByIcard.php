@@ -119,7 +119,10 @@ class PurchaseByIcard extends Base
 
     /**
      * Initiate API request
+     *
      * @return boolean
+     *
+     * @throws IPC_Exception
      */
     public function process()
     {
@@ -164,6 +167,7 @@ class PurchaseByIcard extends Base
      * Validate all set purchase details
      *
      * @return boolean
+     *
      * @throws IPC_Exception
      */
     public function validate()
@@ -185,12 +189,12 @@ class PurchaseByIcard extends Base
             throw new IPC_Exception('Invalid currency');
         }
 
-        if ($this->getEmail() == null || !Helper::isValidEmail($this->getEmail())) {
-            throw new IPC_Exception('Invalid Email');
-        }
-
         if ($this->getEmail() == null && $this->getPhone() == null ) {
             throw new IPC_Exception('Must provide customer email either phone');
+        }
+
+        if ($this->getEmail() != null && !Helper::isValidEmail($this->getEmail())) {
+            throw new IPC_Exception('Invalid Email');
         }
 
         try {

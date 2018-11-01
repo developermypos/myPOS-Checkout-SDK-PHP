@@ -14,10 +14,10 @@ class Config
     private $sid;
     private $wallet;
     private $lang = 'en';
-    private $version = '1.3';
+    private $version = '1.4';
     private $ipc_url = 'https://www.mypos.eu/vmp/checkout';
     private $developerKey;
-    private $source = 'SDK_PHP_1.3';
+    private $source = 'SDK_PHP_1.4';
 
     /**
      * Store private RSA key as a filepath

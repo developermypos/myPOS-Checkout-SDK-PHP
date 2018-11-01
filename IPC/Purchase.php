@@ -11,9 +11,14 @@ class Purchase extends Base
     const PURCHASE_TYPE_FULL = 1;
     const PURCHASE_TYPE_SIMPLIFIED_CALL = 2;
     const PURCHASE_TYPE_SIMPLIFIED_PAYMENT_PAGE = 3;
+
     const CARD_TOKEN_REQUEST_NONE = 0;
     const CARD_TOKEN_REQUEST_ONLY_STORE = 1;
     const CARD_TOKEN_REQUEST_PAY_AND_STORE = 2;
+
+    const PAYMENT_METHOD_STANDARD = 1;
+    const PAYMENT_METHOD_IDEAL = 2;
+    const PAYMENT_METHOD_BOTH = 3;
     /**
      * @var Cart
      */
@@ -24,6 +29,7 @@ class Purchase extends Base
     private $customer;
     private $url_ok, $url_cancel, $url_notify;
     private $currency = 'EUR', $note, $orderID, $cardTokenRequest, $paymentParametersRequired;
+    private $paymentMethod;
 
     /**
      * Return purchase object
@@ -32,6 +38,7 @@ class Purchase extends Base
      */
     public function __construct(Config $cnf)
     {
+        $this->paymentMethod = self::PAYMENT_METHOD_BOTH;
         $this->setCnf($cnf);
     }
 
@@ -115,6 +122,8 @@ class Purchase extends Base
      * Initiate API request
      *
      * @return boolean
+     *
+     * @throws IPC_Exception
      */
     public function process()
     {
@@ -167,6 +176,7 @@ class Purchase extends Base
 
         $this->_addPostParam('CardTokenRequest', $this->getCardTokenRequest());
         $this->_addPostParam('PaymentParametersRequired', $this->getPaymentParametersRequired());
+        $this->_addPostParam('PaymentMethod', $this->getPaymentMethod());
 
         $this->_processHtmlPost();
 
@@ -177,6 +187,7 @@ class Purchase extends Base
      * Validate all set purchase details
      *
      * @return boolean
+     *
      * @throws IPC_Exception
      */
     public function validate()
@@ -405,4 +416,22 @@ class Purchase extends Base
     {
         return $this->note;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentMethod()
+    {
+        return $this->paymentMethod;
+    }
+
+    /**
+     * @param mixed $paymentMethod
+     */
+    public function setPaymentMethod($paymentMethod)
+    {
+        $this->paymentMethod = $paymentMethod;
+    }
+
+
 }
