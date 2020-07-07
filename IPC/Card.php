@@ -10,8 +10,6 @@ class Card
     const CARD_TYPE_VISA_ELECTRON = 4;
     const CARD_TYPE_VPAY = 5;
     const CARD_TYPE_JCB = 6;
-    const CARD_TYPE_AMEX = 8;
-
     private $cardType, $cardNumber, $cardHolder, $expMM, $expYY, $cvc, $eci, $avv, $xid, $cardToken;
 
     /**
