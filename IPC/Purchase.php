@@ -122,7 +122,6 @@ class Purchase extends Base
      * Initiate API request
      *
      * @return boolean
-     *
      * @throws IPC_Exception
      */
     public function process()
@@ -187,7 +186,6 @@ class Purchase extends Base
      * Validate all set purchase details
      *
      * @return boolean
-     *
      * @throws IPC_Exception
      */
     public function validate()
@@ -232,6 +230,10 @@ class Purchase extends Base
         }
 
         if (!$this->isNoCartPurchase()) {
+            if ($this->getCart() === null) {
+                throw new IPC_Exception('Missing Cart details');
+            }
+
             try {
                 $this->getCart()->validate();
             } catch (\Exception $ex) {

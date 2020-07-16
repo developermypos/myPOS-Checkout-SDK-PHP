@@ -62,6 +62,7 @@ class Refund extends Base
      * Initiate API request
      *
      * @return boolean
+     * @throws IPC_Exception
      */
     public function process()
     {

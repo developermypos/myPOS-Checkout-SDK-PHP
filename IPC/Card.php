@@ -10,6 +10,7 @@ class Card
     const CARD_TYPE_VISA_ELECTRON = 4;
     const CARD_TYPE_VPAY = 5;
     const CARD_TYPE_JCB = 6;
+
     private $cardType, $cardNumber, $cardHolder, $expMM, $expYY, $cvc, $eci, $avv, $xid, $cardToken;
 
     /**
@@ -132,6 +133,10 @@ class Card
         $this->cardToken = $cardToken;
     }
 
+    /**
+     * @return bool
+     * @throws IPC_Exception
+     */
     public function validate()
     {
         if ($this->getCardToken()) {
@@ -204,6 +209,6 @@ class Card
      */
     public function getExpDate()
     {
-        return str_pad($this->getExpYY(), 2, 0, STR_PAD_LEFT).str_pad($this->getExpMM(), 2, 0, STR_PAD_LEFT);
+        return str_pad($this->getExpYY(), 2, 0, STR_PAD_LEFT) . str_pad($this->getExpMM(), 2, 0, STR_PAD_LEFT);
     }
 }

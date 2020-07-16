@@ -137,10 +137,18 @@ class IAPurchase extends Base
             throw new IPC_Exception('Invalid Config details: '.$ex->getMessage());
         }
 
+        if ($this->getCart() === null) {
+            throw new IPC_Exception('Missing Cart details');
+        }
+
         try {
             $this->getCart()->validate();
         } catch (\Exception $ex) {
             throw new IPC_Exception('Invalid Cart details: '.$ex->getMessage());
+        }
+
+        if ($this->getCard() === null) {
+            throw new IPC_Exception('Missing card details');
         }
 
         try {

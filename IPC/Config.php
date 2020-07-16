@@ -17,7 +17,15 @@ class Config
     private $version = '1.4';
     private $ipc_url = 'https://www.mypos.eu/vmp/checkout';
     private $developerKey;
-    private $source = 'SDK_PHP_1.4';
+    private $source;
+
+    /**
+     * Config constructor.
+     */
+    public function __construct()
+    {
+        $this->source = 'SDK_PHP_' . Defines::SDK_VERSION;
+    }
 
     /**
      * Store private RSA key as a filepath

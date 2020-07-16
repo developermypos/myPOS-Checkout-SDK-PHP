@@ -18,6 +18,8 @@ class Response
      * @param Config $cnf
      * @param string|array $raw_data
      * @param string $format COMMUNICATION_FORMAT_JSON|COMMUNICATION_FORMAT_XML|COMMUNICATION_FORMAT_POST
+     *
+     * @throws IPC_Exception
      */
     public function __construct(Config $cnf, $raw_data, $format)
     {
@@ -25,6 +27,13 @@ class Response
         $this->_setData($raw_data, $format);
     }
 
+    /**
+     * @param $raw_data
+     * @param $format
+     *
+     * @return $this
+     * @throws IPC_Exception
+     */
     private function _setData($raw_data, $format)
     {
         if (empty($raw_data)) {
@@ -56,7 +65,13 @@ class Response
             throw new IPC_Exception('No IPC Response!');
         }
 
-        $this->_extractSignature() && $this->_verifySignature();
+        $this->_extractSignature();
+
+        if (empty($this->signature) && array_key_exists('Status', $this->data) && $this->data['Status'] === Defines::STATUS_IPC_ERROR) {
+            throw new IPC_Exception('IPC Response - General Error!');
+        }
+
+        $this->_verifySignature();
 
         return $this;
     }
@@ -75,6 +90,9 @@ class Response
         return true;
     }
 
+    /**
+     * @throws IPC_Exception
+     */
     private function _verifySignature()
     {
         if (empty($this->signature)) {
@@ -104,6 +122,7 @@ class Response
      * @param string $format
      *
      * @return Response
+     * @throws IPC_Exception
      */
     public static function getInstance(Config $cnf, $raw_data, $format)
     {
@@ -142,6 +161,7 @@ class Response
      * Request param: Status
      *
      * @return int
+     * @throws IPC_Exception
      */
     function getStatus()
     {
@@ -176,6 +196,7 @@ class Response
      * Request param: StatusMsg
      *
      * @return string
+     * @throws IPC_Exception
      */
     function getStatusMsg()
     {

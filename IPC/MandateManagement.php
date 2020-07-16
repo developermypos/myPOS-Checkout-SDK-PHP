@@ -56,6 +56,7 @@ class MandateManagement extends Base
      * Initiate API request
      *
      * @return Response
+     * @throws IPC_Exception
      */
     public function process()
     {

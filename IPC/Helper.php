@@ -168,6 +168,11 @@ class Helper
         return (is_numeric($cvc) && strlen($cvc) == 3);
     }
 
+    public static function versionCheck($current, $required)
+    {
+        return (int)str_replace('.', '', $current) >= (int)str_replace('.', '', $required);
+    }
+
     /**
      * Escape HTML special chars
      *

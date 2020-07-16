@@ -3,21 +3,19 @@
 namespace Mypos\IPC;
 
 /**
- * Process IPC method: IPCPurchaseByIcard.
+ * Process IPC method: IPCPreAuthorization.
  * Collect, validate and send API params
  */
-class PurchaseByIcard extends Base
+class PreAuthorization extends Base
 {
     /**
-     * @var Cart
+     * @var Customer
      */
-    private $cart;
-
-    private $url_ok, $url_cancel, $url_notify, $phone, $email;
-    private $currency = 'EUR', $orderID;
+    private $url_ok, $url_cancel, $url_notify;
+    private $currency = 'EUR', $note, $orderID, $itemName, $amount;
 
     /**
-     * Return purchase object
+     * Return PreAuthorization object
      *
      * @param Config $cnf
      */
@@ -27,11 +25,11 @@ class PurchaseByIcard extends Base
     }
 
     /**
-     * Purchase identifier - must be unique
+     * PreAuthorization identifier - must be unique
      *
      * @param string $orderID
      *
-     * @return PurchaseByIcard
+     * @return PreAuthorization
      */
     public function setOrderID($orderID)
     {
@@ -41,49 +39,42 @@ class PurchaseByIcard extends Base
     }
 
     /**
-     * Customer Phone number
+     * @param string $itemName
      *
-     * @return string
+     * @return PreAuthorization
      */
-    public function getPhone()
+    public function setItemName($itemName)
     {
-        return $this->phone;
-    }
-
-    /**
-     * Customer Phone number
-     *
-     * @param string $phone
-     *
-     * @return PurchaseByIcard
-     */
-    public function setPhone($phone)
-    {
-        $this->phone = $phone;
+        $this->itemName = $itemName;
 
         return $this;
     }
 
     /**
-     * Customer Email address
+     * Total amount of the PreAuthorization
      *
-     * @return string
+     * @param float $amount
+     *
+     * @return PreAuthorization
      */
-    public function getEmail()
+    public function setAmount($amount)
     {
-        return $this->email;
+        $this->amount = $amount;
+
+        return $this;
     }
 
+
     /**
-     * Customer Email address
+     * Optional note for PreAuthorization
      *
-     * @param string $email
+     * @param string $note
      *
-     * @return PurchaseByIcard
+     * @return PreAuthorization
      */
-    public function setEmail($email)
+    public function setNote($note)
     {
-        $this->email = $email;
+        $this->note = $note;
 
         return $this;
     }
@@ -93,7 +84,7 @@ class PurchaseByIcard extends Base
      *
      * @param string $urlCancel
      *
-     * @return PurchaseByIcard
+     * @return PreAuthorization
      */
     public function setUrlCancel($urlCancel)
     {
@@ -103,11 +94,11 @@ class PurchaseByIcard extends Base
     }
 
     /**
-     * Merchant Site URL where IPC posts Purchase Notify requests
+     * Merchant Site URL where IPC posts PreAuthorization Notify requests
      *
      * @param string $urlNotify
      *
-     * @return PurchaseByIcard
+     * @return PreAuthorization
      */
     public function setUrlNotify($urlNotify)
     {
@@ -115,7 +106,6 @@ class PurchaseByIcard extends Base
 
         return $this;
     }
-
 
     /**
      * Initiate API request
@@ -127,7 +117,7 @@ class PurchaseByIcard extends Base
     {
         $this->validate();
 
-        $this->_addPostParam('IPCmethod', 'IPCPurchaseByIcard');
+        $this->_addPostParam('IPCmethod', 'IPCPreAuthorization');
         $this->_addPostParam('IPCVersion', $this->getCnf()->getVersion());
         $this->_addPostParam('IPCLanguage', $this->getCnf()->getLang());
         $this->_addPostParam('SID', $this->getCnf()->getSid());
@@ -135,41 +125,38 @@ class PurchaseByIcard extends Base
         $this->_addPostParam('KeyIndex', $this->getCnf()->getKeyIndex());
         $this->_addPostParam('Source', $this->getCnf()->getSource());
 
+        $this->_addPostParam('ItemName', $this->getItemName());
+
         $this->_addPostParam('Currency', $this->getCurrency());
-        $this->_addPostParam('Amount', $this->cart->getTotal());
+        $this->_addPostParam('Amount', $this->getAmount());
 
         $this->_addPostParam('OrderID', $this->getOrderID());
         $this->_addPostParam('URL_OK', $this->getUrlOk());
         $this->_addPostParam('URL_Cancel', $this->getUrlCancel());
         $this->_addPostParam('URL_Notify', $this->getUrlNotify());
 
-        $this->_addPostParam('CustomerEmail', $this->getEmail());
-        $this->_addPostParam('CustomerPhone', $this->getPhone());
+        $this->_addPostParam('Note', $this->getNote());
 
-        $this->_addPostParam('CartItems', $this->cart->getItemsCount());
-        $items = $this->cart->getCart();
-        $i = 1;
-        foreach ($items as $v) {
-            $this->_addPostParam('Article_' . $i, $v['name']);
-            $this->_addPostParam('Quantity_' . $i, $v['quantity']);
-            $this->_addPostParam('Price_' . $i, $v['price']);
-            $this->_addPostParam('Amount_' . $i, $v['price'] * $v['quantity']);
-            $this->_addPostParam('Currency_' . $i, $this->getCurrency());
-            $i++;
-        }
         $this->_processHtmlPost();
 
         return true;
     }
 
     /**
-     * Validate all set purchase details
+     * Validate all set PreAuthorization details
      *
      * @return boolean
      * @throws IPC_Exception
      */
     public function validate()
     {
+        if (!Helper::versionCheck($this->getCnf()->getVersion(), '1.4')) {
+            throw new IPC_Exception('IPCVersion ' . $this->getCnf()->getVersion() . ' does not support IPCPreAuthorization method. Please use 1.4 or above.');
+        }
+
+        if ($this->getItemName() === null || !is_string($this->getItemName())) {
+            throw new IPC_Exception('Empty or invalid item name.');
+        }
 
         if ($this->getUrlCancel() === null || !Helper::isValidURL($this->getUrlCancel())) {
             throw new IPC_Exception('Invalid Cancel URL');
@@ -183,32 +170,18 @@ class PurchaseByIcard extends Base
             throw new IPC_Exception('Invalid Success URL');
         }
 
+        if ($this->getAmount() === null || !Helper::isValidAmount($this->getAmount())) {
+            throw new IPC_Exception('Empty or invalid amount');
+        }
+
         if ($this->getCurrency() === null) {
             throw new IPC_Exception('Invalid currency');
-        }
-
-        if ($this->getEmail() == null && $this->getPhone() == null ) {
-            throw new IPC_Exception('Must provide customer email either phone');
-        }
-
-        if ($this->getEmail() != null && !Helper::isValidEmail($this->getEmail())) {
-            throw new IPC_Exception('Invalid Email');
         }
 
         try {
             $this->getCnf()->validate();
         } catch (\Exception $ex) {
             throw new IPC_Exception('Invalid Config details: ' . $ex->getMessage());
-        }
-
-        if ($this->getCart() === null) {
-            throw new IPC_Exception('Missing Cart details');
-        }
-
-        try {
-            $this->getCart()->validate();
-        } catch (\Exception $ex) {
-            throw new IPC_Exception('Invalid Cart details: ' . $ex->getMessage());
         }
 
         return true;
@@ -225,7 +198,7 @@ class PurchaseByIcard extends Base
     }
 
     /**
-     * Merchant Site URL where IPC posts Purchase Notify requests
+     * Merchant Site URL where IPC posts PreAuthorization Notify requests
      *
      * @var string
      */
@@ -249,7 +222,7 @@ class PurchaseByIcard extends Base
      *
      * @param string $urlOk
      *
-     * @return PurchaseByIcard
+     * @return PreAuthorization
      */
     public function setUrlOk($urlOk)
     {
@@ -273,7 +246,7 @@ class PurchaseByIcard extends Base
      *
      * @param string $currency
      *
-     * @return PurchaseByIcard
+     * @return PreAuthorization
      */
     public function setCurrency($currency)
     {
@@ -282,37 +255,42 @@ class PurchaseByIcard extends Base
         return $this;
     }
 
-    /**
-     * Cart object
-     *
-     * @return Cart
-     */
-    public function getCart()
-    {
-        return $this->cart;
-    }
 
     /**
-     * Cart object
-     *
-     * @param Cart $cart
-     *
-     * @return PurchaseByIcard
-     */
-    public function setCart(Cart $cart)
-    {
-        $this->cart = $cart;
-
-        return $this;
-    }
-
-    /**
-     * Purchase identifier
+     * PreAuthorization identifier
      *
      * @return string
      */
     public function getOrderID()
     {
         return $this->orderID;
+    }
+
+    /**
+     * @return string
+     */
+    public function getItemName()
+    {
+        return $this->itemName;
+    }
+
+    /**
+     * Total amount of the PreAuthorization
+     *
+     * @return float
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * Optional note to PreAuthorization
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
     }
 }

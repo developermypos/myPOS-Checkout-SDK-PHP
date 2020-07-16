@@ -77,6 +77,10 @@ class IAStoreCard extends CardStore
             throw new IPC_Exception('Invalid Config details: '.$ex->getMessage());
         }
 
+        if ($this->getCard() === null) {
+            throw new IPC_Exception('Missing card details');
+        }
+
         try {
             $this->getCard()->validate();
         } catch (\Exception $ex) {
