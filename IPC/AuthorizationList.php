@@ -8,8 +8,6 @@ namespace Mypos\IPC;
  */
 class AuthorizationList extends Base
 {
-    private $orderID;
-
     /**
      * Return purchase object
      *
@@ -18,20 +16,6 @@ class AuthorizationList extends Base
     public function __construct(Config $cnf)
     {
         $this->setCnf($cnf);
-    }
-
-    /**
-     * Purchase identifier - must be unique
-     *
-     * @param string $orderID
-     *
-     * @return AuthorizationList
-     */
-    public function setOrderID($orderID)
-    {
-        $this->orderID = $orderID;
-
-        return $this;
     }
 
     /**
@@ -51,8 +35,6 @@ class AuthorizationList extends Base
         $this->_addPostParam('WalletNumber', $this->getCnf()->getWallet());
         $this->_addPostParam('KeyIndex', $this->getCnf()->getKeyIndex());
         $this->_addPostParam('Source', $this->getCnf()->getSource());
-
-        $this->_addPostParam('OrderID', $this->getOrderID());
 
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
 
@@ -78,15 +60,5 @@ class AuthorizationList extends Base
         }
 
         return true;
-    }
-
-    /**
-     * Purchase identifier
-     *
-     * @return string
-     */
-    public function getOrderID()
-    {
-        return $this->orderID;
     }
 }
