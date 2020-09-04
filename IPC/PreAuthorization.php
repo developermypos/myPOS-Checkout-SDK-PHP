@@ -108,12 +108,13 @@ class PreAuthorization extends Base
     }
 
     /**
-     * Initiate API request
+     * Initiate API request params
      *
-     * @return boolean
+     * @return PreAuthorization
+     *
      * @throws IPC_Exception
      */
-    public function process()
+    public function processParams()
     {
         $this->validate();
 
@@ -136,6 +137,19 @@ class PreAuthorization extends Base
         $this->_addPostParam('URL_Notify', $this->getUrlNotify());
 
         $this->_addPostParam('Note', $this->getNote());
+
+        return $this;
+    }
+
+    /**
+     * Initiate API request
+     *
+     * @return boolean
+     * @throws IPC_Exception
+     */
+    public function process()
+    {
+        $this->processParams();
 
         $this->_processHtmlPost();
 

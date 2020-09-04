@@ -116,14 +116,14 @@ class PurchaseByIcard extends Base
         return $this;
     }
 
-
     /**
-     * Initiate API request
+     * Initiate API request params
      *
-     * @return boolean
+     * @return PurchaseByIcard
+     *
      * @throws IPC_Exception
      */
-    public function process()
+    public function processParams()
     {
         $this->validate();
 
@@ -157,6 +157,20 @@ class PurchaseByIcard extends Base
             $this->_addPostParam('Currency_' . $i, $this->getCurrency());
             $i++;
         }
+
+        return $this;
+    }
+
+    /**
+     * Initiate API request
+     *
+     * @return boolean
+     * @throws IPC_Exception
+     */
+    public function process()
+    {
+        $this->processParams();
+
         $this->_processHtmlPost();
 
         return true;

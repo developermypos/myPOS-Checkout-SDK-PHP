@@ -119,12 +119,13 @@ class Purchase extends Base
     }
 
     /**
-     * Initiate API request
+     * Initiate API request params
      *
-     * @return boolean
+     * @return Purchase
+     *
      * @throws IPC_Exception
      */
-    public function process()
+    public function processParams()
     {
         $this->validate();
 
@@ -176,6 +177,19 @@ class Purchase extends Base
         $this->_addPostParam('CardTokenRequest', $this->getCardTokenRequest());
         $this->_addPostParam('PaymentParametersRequired', $this->getPaymentParametersRequired());
         $this->_addPostParam('PaymentMethod', $this->getPaymentMethod());
+
+        return $this;
+    }
+
+    /**
+     * Initiate API request
+     *
+     * @return boolean
+     * @throws IPC_Exception
+     */
+    public function process()
+    {
+        $this->processParams();
 
         $this->_processHtmlPost();
 
