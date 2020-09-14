@@ -7,6 +7,10 @@ namespace Mypos\IPC;
  */
 class Cart
 {
+    const ITEM_TYPE_ARTICLE = 'article';
+    const ITEM_TYPE_DELIVERY = 'delivery';
+    const ITEM_TYPE_DISCOUNT = 'discount';
+
     /**
      * Array containing cart items
      *
@@ -20,10 +24,11 @@ class Cart
      * @param int $quantity Items quantity
      * @param float $price Single item price
      *
+     * @param string $type
      * @return Cart
      * @throws IPC_Exception
      */
-    public function add($itemName, $quantity, $price)
+    public function add($itemName, $quantity, $price, $type = self::ITEM_TYPE_ARTICLE)
     {
         if (empty($itemName)) {
             throw new IPC_Exception('Invalid cart item name');
@@ -37,11 +42,22 @@ class Cart
             throw new IPC_Exception('Invalid cart item price');
         }
 
-        $this->cart[] = [
+        $item = [
             'name' => $itemName,
             'quantity' => $quantity,
             'price' => $price,
         ];
+
+        switch ($type) {
+            case self::ITEM_TYPE_DELIVERY:
+                $item['delivery'] = 1;
+                break;
+            case self::ITEM_TYPE_DISCOUNT:
+                $item['price'] = $num = -1 * abs($item['price']);
+                break;
+        }
+
+        $this->cart[] = $item;
 
         return $this;
     }

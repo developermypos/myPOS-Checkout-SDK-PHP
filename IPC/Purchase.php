@@ -169,6 +169,10 @@ class Purchase extends Base
                 $this->_addPostParam('Price_' . $i, $v['price']);
                 $this->_addPostParam('Amount_' . $i, $v['price'] * $v['quantity']);
                 $this->_addPostParam('Currency_' . $i, $this->getCurrency());
+                if (!empty($v['delivery'])) {
+                    $this->_addPostParam('Delivery_' . $i, $v['delivery']);
+                }
+
                 $i++;
             }
         }
