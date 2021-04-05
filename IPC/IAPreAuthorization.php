@@ -135,14 +135,18 @@ class IAPreAuthorization extends Base
         $this->_addPostParam('Amount', $this->getAmount());
         $this->_addPostParam('Currency', $this->getCurrency());
 
-        $this->_addPostParam('CardType', $this->getCard()->getCardType());
-        $this->_addPostParam('PAN', $this->getCard()->getCardNumber(), true);
-        $this->_addPostParam('CardholderName', $this->getCard()->getCardHolder());
-        $this->_addPostParam('ExpDate', $this->getCard()->getExpDate(), true);
-        $this->_addPostParam('CVC', $this->getCard()->getCvc(), true);
-        $this->_addPostParam('ECI', $this->getCard()->getEci());
-        $this->_addPostParam('AVV', $this->getCard()->getAvv());
-        $this->_addPostParam('XID', $this->getCard()->getXid());
+        if ($this->getCard()->getCardToken()) {
+            $this->_addPostParam('CardToken', $this->getCard()->getCardToken());
+        } else {
+            $this->_addPostParam('CardType', $this->getCard()->getCardType());
+            $this->_addPostParam('PAN', $this->getCard()->getCardNumber(), true);
+            $this->_addPostParam('CardholderName', $this->getCard()->getCardHolder());
+            $this->_addPostParam('ExpDate', $this->getCard()->getExpDate(), true);
+            $this->_addPostParam('CVC', $this->getCard()->getCvc(), true);
+            $this->_addPostParam('ECI', $this->getCard()->getEci());
+            $this->_addPostParam('AVV', $this->getCard()->getAvv());
+            $this->_addPostParam('XID', $this->getCard()->getXid());
+        }
 
         $this->_addPostParam('Note', $this->getNote());
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
@@ -182,10 +186,6 @@ class IAPreAuthorization extends Base
 
         if ($this->getCard() === null) {
             throw new IPC_Exception('Missing card details');
-        }
-
-        if ($this->getCard()->getCardToken() !== null) {
-            throw new IPC_Exception('IPCIAPreAuthorization does not support card token.');
         }
 
         try {
