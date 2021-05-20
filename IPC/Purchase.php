@@ -148,16 +148,14 @@ class Purchase extends Base
 
         $this->_addPostParam('Note', $this->getNote());
 
-        if ($this->getPaymentParametersRequired() != self::PURCHASE_TYPE_SIMPLIFIED_PAYMENT_PAGE) {
-            $this->_addPostParam('customeremail', $this->getCustomer()->getEmail());
-            $this->_addPostParam('customerphone', $this->getCustomer()->getPhone());
-            $this->_addPostParam('customerfirstnames', $this->getCustomer()->getFirstName());
-            $this->_addPostParam('customerfamilyname', $this->getCustomer()->getLastName());
-            $this->_addPostParam('customercountry', $this->getCustomer()->getCountry());
-            $this->_addPostParam('customercity', $this->getCustomer()->getCity());
-            $this->_addPostParam('customerzipcode', $this->getCustomer()->getZip());
-            $this->_addPostParam('customeraddress', $this->getCustomer()->getAddress());
-        }
+        $this->_addPostParam('customeremail', $this->getCustomer()->getEmail());
+        $this->_addPostParam('customerphone', $this->getCustomer()->getPhone());
+        $this->_addPostParam('customerfirstnames', $this->getCustomer()->getFirstName());
+        $this->_addPostParam('customerfamilyname', $this->getCustomer()->getLastName());
+        $this->_addPostParam('customercountry', $this->getCustomer()->getCountry());
+        $this->_addPostParam('customercity', $this->getCustomer()->getCity());
+        $this->_addPostParam('customerzipcode', $this->getCustomer()->getZip());
+        $this->_addPostParam('customeraddress', $this->getCustomer()->getAddress());
 
         if (!$this->isNoCartPurchase()) {
             $this->_addPostParam('CartItems', $this->cart->getItemsCount());
