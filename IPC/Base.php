@@ -62,6 +62,16 @@ abstract class Base
     }
 
     /**
+     * Get API request params
+     *
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params + ['Signature' => $this->_createSignature()];
+    }
+
+    /**
      * Add API request param
      *
      * @param string $paramName
