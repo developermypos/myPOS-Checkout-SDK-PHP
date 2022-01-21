@@ -126,6 +126,20 @@ abstract class Base
     }
 
     /**
+     * Generate HTML form with POST params and auto-submit it
+     */
+    protected function _buildArrayParameters()
+    {
+        $formParameters = [];
+        $formParameters['ActionUrl'] = $this->getCnf()->getIpcURL();
+        $formParameters['FormData'] = $this->params;
+        #Add request signature
+        $formParameters['FormData']['Signature'] = $this->_createSignature();
+
+        return $formParameters;
+    }
+
+    /**
      * Create signature of API Request params against the SID private key
      *
      * @return string base64 encoded signature
