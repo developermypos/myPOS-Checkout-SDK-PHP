@@ -15,7 +15,7 @@ class Config
     private $wallet;
     private $lang = 'en';
     private $version = '1.4';
-    private $ipc_url = 'https://www.mypos.eu/vmp/checkout';
+    private $ipc_url = 'https://www.mypos.com/vmp/checkout';
     private $developerKey;
     private $source;
 
