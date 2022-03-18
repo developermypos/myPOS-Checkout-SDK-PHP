@@ -186,9 +186,9 @@ class Purchase extends Base
         return true;
     }
 
-    public function getFormParameters()
+    public function getFormParameters($escapeParameters = false)
     {
-        return $this->_buildArrayParameters();
+        return $this->_buildArrayParameters($escapeParameters);
     }
 
     /**

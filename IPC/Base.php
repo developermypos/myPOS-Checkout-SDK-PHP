@@ -128,11 +128,13 @@ abstract class Base
     /**
      * Generate HTML form with POST params and auto-submit it
      */
-    protected function _buildArrayParameters()
+    protected function _buildArrayParameters($escapeParameters = false)
     {
-        $formParameters = [];
         $formParameters['ActionUrl'] = $this->getCnf()->getIpcURL();
-        $formParameters['FormData'] = $this->params;
+        $formParameters['FormData'] = $escapeParameters ? $this->params : array_map(function ($formData) {
+            return Helper::unescape($formData);
+        }, $this->params);
+
         #Add request signature
         $formParameters['FormData']['Signature'] = $this->_createSignature();
 

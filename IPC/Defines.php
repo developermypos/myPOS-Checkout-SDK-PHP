@@ -35,7 +35,7 @@ class Defines
     const STATUS_TRANSACTION_DECLINED = 21;
     const STATUS_UNDEFINED_ERROR = 99;
     const ENCRYPT_PADDING = OPENSSL_PKCS1_PADDING;
-    const SDK_VERSION = '1.2.1';
+    const SDK_VERSION = '1.2.2';
 
     private function __construct() { }
 }
