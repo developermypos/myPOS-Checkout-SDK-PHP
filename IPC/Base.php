@@ -185,12 +185,12 @@ abstract class Base
         } else {
             $eol = "\r\n";
             $path = $url['path'].(!(empty($url['query'])) ? ('?'.$url['query']) : '');
-            fputs($fp, "POST ".$path." HTTP/1.1".$eol);
-            fputs($fp, "Host: ".$url['host'].$eol);
-            fputs($fp, "Content-type: application/x-www-form-urlencoded".$eol);
-            fputs($fp, "Content-length: ".strlen($postData).$eol);
-            fputs($fp, "Connection: close".$eol.$eol);
-            fputs($fp, $postData.$eol.$eol);
+            fwrite($fp, "POST ".$path." HTTP/1.1".$eol);
+            fwrite($fp, "Host: ".$url['host'].$eol);
+            fwrite($fp, "Content-type: application/x-www-form-urlencoded".$eol);
+            fwrite($fp, "Content-length: ".strlen($postData).$eol);
+            fwrite($fp, "Connection: close".$eol.$eol);
+            fwrite($fp, $postData.$eol.$eol);
 
             $result = '';
             while (!feof($fp)) {
