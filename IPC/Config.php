@@ -14,7 +14,7 @@ class Config
     private $sid;
     private $wallet;
     private $lang = 'en';
-    private $version = '1.4';
+    private $version = '1.4.1';
     private $ipc_url = 'https://www.mypos.com/vmp/checkout';
     private $developerKey;
     private $source;

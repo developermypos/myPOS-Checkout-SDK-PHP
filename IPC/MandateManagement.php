@@ -11,6 +11,7 @@ class MandateManagement extends Base
     const MANDATE_MANAGEMENT_ACTION_REGISTER = 1;
     const MANDATE_MANAGEMENT_ACTION_CANCEL = 2;
     private $mandateReference, $customerWalletNumber, $action, $mandateText;
+    private $applicationID, $partnerID;
 
     /**
      * Return Refund object
@@ -74,6 +75,9 @@ class MandateManagement extends Base
         $this->_addPostParam('MandateText', $this->getMandateText());
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
 
+        $this->_addPostParam('ApplicationID', $this->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getPartnerID());
+
         return $this->_processPost();
     }
 
@@ -93,6 +97,14 @@ class MandateManagement extends Base
 
         if ($this->getOutputFormat() == null || !Helper::isValidOutputFormat($this->getOutputFormat())) {
             throw new IPC_Exception('Invalid Output format');
+        }
+
+        if ($this->getPartnerID() == null){
+            throw new IPC_Exception('Required parameter: Partner ID');
+        }
+
+        if ($this->getApplicationID() == null){
+            throw new IPC_Exception('Required parameter: Application ID');
         }
 
         return true;
@@ -146,5 +158,49 @@ class MandateManagement extends Base
     public function getMandateText()
     {
         return $this->mandateText;
+    }
+
+    /**
+     * Get the application ID.
+     * @return mixed
+     */
+    public function getApplicationID()
+    {
+        return $this->applicationID;
+    }
+
+    /**
+     * Sets the application ID.
+     *
+     * @param string $applicationID The application ID to set.
+     * @return $this
+     */
+    public function setApplicationID($applicationID)
+    {
+        $this->applicationID = $applicationID;
+
+        return $this;
+    }
+
+    /**
+     * Get the partner ID.
+     * @return mixed
+     */
+    public function getPartnerID()
+    {
+        return $this->partnerID;
+    }
+
+    /**
+     * Sets the partner ID.
+     *
+     * @param string $partnerID The partner ID to set.
+     * @return $this
+     */
+    public function setPartnerID($partnerID)
+    {
+        $this->partnerID = $partnerID;
+
+        return $this;
     }
 }

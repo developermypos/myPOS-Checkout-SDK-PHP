@@ -13,6 +13,7 @@ class IAPreAuthorization extends Base
      */
     private $card;
     private $currency = 'EUR', $note, $orderID, $itemName, $amount;
+    private $applicationID, $partnerID;
 
 
     /**
@@ -151,6 +152,9 @@ class IAPreAuthorization extends Base
         $this->_addPostParam('Note', $this->getNote());
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
 
+        $this->_addPostParam('ApplicationID', $this->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getPartnerID());
+
         return $this->_processPost();
     }
 
@@ -192,6 +196,14 @@ class IAPreAuthorization extends Base
             $this->getCard()->validate();
         } catch (\Exception $ex) {
             throw new IPC_Exception('Invalid Card details: ' . $ex->getMessage());
+        }
+
+        if ($this->getPartnerID() == null){
+            throw new IPC_Exception('Required parameter: Partner ID');
+        }
+
+        if ($this->getApplicationID() == null){
+            throw new IPC_Exception('Required parameter: Application ID');
         }
 
         return true;
@@ -255,5 +267,53 @@ class IAPreAuthorization extends Base
     public function getNote()
     {
         return $this->note;
+    }
+
+    /**
+     * Retrieves the application ID associated with the instance.
+     *
+     * @return mixed
+     */
+    public function getApplicationID()
+    {
+        return $this->applicationID;
+    }
+
+    /**
+     * Sets the application ID for the operation
+     *
+     * @param mixed $applicationID
+     *
+     * @return self
+     */
+    public function setApplicationID($applicationID)
+    {
+        $this->applicationID = $applicationID;
+
+        return $this;
+    }
+
+    /**
+     * Retrieves the partner ID.
+     *
+     * @return mixed The partner ID.
+     */
+    public function getPartnerID()
+    {
+        return $this->partnerID;
+    }
+
+    /**
+     * Sets the Partner ID for the instance
+     *
+     * @param mixed $partnerID
+     *
+     * @return self
+     */
+    public function setPartnerID($partnerID)
+    {
+        $this->partnerID = $partnerID;
+
+        return $this;
     }
 }

@@ -17,6 +17,7 @@ class IAPurchase extends Base
      */
     private $card;
     private $currency = 'EUR', $note, $orderID, $accountSettlement;
+    private $applicationID, $partnerID;
 
     /**
      * Return purchase object
@@ -116,6 +117,9 @@ class IAPurchase extends Base
             $i++;
         }
 
+        $this->_addPostParam('ApplicationID', $this->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getPartnerID());
+
         return $this->_processPost();
     }
 
@@ -155,6 +159,14 @@ class IAPurchase extends Base
             $this->getCard()->validate();
         } catch (\Exception $ex) {
             throw new IPC_Exception('Invalid Card details: '.$ex->getMessage());
+        }
+
+        if ($this->getPartnerID() == null){
+            throw new IPC_Exception('Required parameter: Partner ID');
+        }
+
+        if ($this->getApplicationID() == null){
+            throw new IPC_Exception('Required parameter: Application ID');
         }
 
         return true;
@@ -256,5 +268,51 @@ class IAPurchase extends Base
     public function getNote()
     {
         return $this->note;
+    }
+
+    /**
+     * Application ID
+     *
+     * @return mixed
+     */
+    public function getApplicationID()
+    {
+        return $this->applicationID;
+    }
+
+    /**
+     * Sets the application ID
+     *
+     * @param mixed $applicationID The application ID to set
+     * @return $this
+     */
+    public function setApplicationID($applicationID)
+    {
+        $this->applicationID = $applicationID;
+
+        return $this;
+    }
+
+    /**
+     * Partner ID
+     *
+     * @return mixed
+     */
+    public function getPartnerID()
+    {
+        return $this->partnerID;
+    }
+
+    /**
+     * Sets the partner ID
+     *
+     * @param mixed $partnerID The partner ID to set
+     * @return $this
+     */
+    public function setPartnerID($partnerID)
+    {
+        $this->partnerID = $partnerID;
+
+        return $this;
     }
 }

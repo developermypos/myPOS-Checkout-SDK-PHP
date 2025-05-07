@@ -13,6 +13,7 @@ class Authorization extends Base
      */
     private $card;
     private $currency = 'EUR', $note, $orderID, $itemName, $amount;
+    private $applicationID, $partnerID;
 
 
     /**
@@ -109,6 +110,51 @@ class Authorization extends Base
         return $this;
     }
 
+    /**
+     * Set application ID
+     * @param $applicationID
+     * @return $this
+     */
+    public function setApplicationID($applicationID)
+    {
+        $this->applicationID = $applicationID;
+
+        return $this;
+    }
+
+    /**
+     * Get application ID
+     *
+     * @return mixed
+     */
+    public function getApplicationID()
+    {
+        return $this->applicationID;
+    }
+
+    /**
+     * Set Partner ID
+     *
+     * @param mixed $partnerID
+     *
+     * @return Authorization
+     */
+    public function setPartnerID($partnerID)
+    {
+        $this->partnerID = $partnerID;
+
+        return $this;
+    }
+
+    /**
+     * Get Partner ID
+     *
+     * @return mixed
+     */
+    public function getPartnerID()
+    {
+        return $this->partnerID;
+    }
 
     /**
      * Initiate API request
@@ -139,6 +185,9 @@ class Authorization extends Base
 
         $this->_addPostParam('Note', $this->getNote());
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
+
+        $this->_addPostParam('ApplicationID', $this->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getPartnerID());
 
         return $this->_processPost();
     }
@@ -185,6 +234,14 @@ class Authorization extends Base
             $this->getCard()->validate();
         } catch (\Exception $ex) {
             throw new IPC_Exception('Invalid Card details: ' . $ex->getMessage());
+        }
+
+        if ($this->getPartnerID() == null){
+            throw new IPC_Exception('Required parameter: Partner ID');
+        }
+
+        if ($this->getApplicationID() == null){
+            throw new IPC_Exception('Required parameter: Application ID');
         }
 
         return true;

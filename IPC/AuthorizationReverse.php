@@ -9,6 +9,7 @@ namespace Mypos\IPC;
 class AuthorizationReverse extends Base
 {
     private $currency = 'EUR', $orderID, $amount;
+    private $applicationID, $partnerID;
 
     /**
      * Return purchase object
@@ -87,6 +88,9 @@ class AuthorizationReverse extends Base
         
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
 
+        $this->_addPostParam('ApplicationID', $this->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getPartnerID());
+
         return $this->_processPost();
     }
 
@@ -115,7 +119,15 @@ class AuthorizationReverse extends Base
         if ($this->getAmount() === null || !Helper::isValidAmount($this->getAmount())) {
             throw new IPC_Exception('Empty or invalid amount');
         }
-        
+
+        if ($this->getPartnerID() == null){
+            throw new IPC_Exception('Required parameter: Partner ID');
+        }
+
+        if ($this->getApplicationID() == null){
+            throw new IPC_Exception('Required parameter: Application ID');
+        }
+
         return true;
     }
 
@@ -147,6 +159,52 @@ class AuthorizationReverse extends Base
     public function getAmount()
     {
         return $this->amount;
+    }
+
+    /**
+     * Retrieves the application ID.
+     *
+     * @return mixed
+     */
+    public function getApplicationID()
+    {
+        return $this->applicationID;
+    }
+
+    /**
+     * Sets the application ID.
+     *
+     * @param mixed $applicationID The application ID to be set.
+     *
+     * @return self
+     */
+    public function setApplicationID($applicationID)
+    {
+        $this->applicationID = $applicationID;
+        return $this;
+    }
+
+    /**
+     * Retrieves the partner ID
+     *
+     * @return mixed The partner ID
+     */
+    public function getPartnerID()
+    {
+        return $this->partnerID;
+
+    }
+
+    /**
+     * Sets the partner ID.
+     *
+     * @param mixed $partnerID The partner ID to set.
+     *
+     * @return void
+     */
+    public function setPartnerID($partnerID)
+    {
+        $this->partnerID = $partnerID;
     }
     
 }

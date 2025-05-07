@@ -15,6 +15,8 @@ class IAStoreCard extends CardStore
      */
     private $card;
 
+    private $applicationID, $partnerID;
+
     /**
      * Return purchase object
      *
@@ -59,6 +61,9 @@ class IAStoreCard extends CardStore
 
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
 
+        $this->_addPostParam('ApplicationID', $this->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getPartnerID());
+
         return $this->_processPost();
     }
 
@@ -87,6 +92,14 @@ class IAStoreCard extends CardStore
             throw new IPC_Exception('Invalid Card details: '.$ex->getMessage());
         }
 
+        if ($this->getPartnerID() == null){
+            throw new IPC_Exception('Required parameter: Partner ID');
+        }
+
+        if ($this->getApplicationID() == null){
+            throw new IPC_Exception('Required parameter: Application ID');
+        }
+
         return true;
     }
 
@@ -108,5 +121,51 @@ class IAStoreCard extends CardStore
     public function setCard($card)
     {
         $this->card = $card;
+    }
+
+    /**
+     * Retrieves the application ID
+     *
+     * @return mixed Application ID
+     */
+    public function getApplicationID()
+    {
+        return $this->applicationID;
+    }
+
+    /**
+     * Sets the application ID.
+     *
+     * @param mixed $applicationID The application ID to set.
+     * @return $this
+     */
+    public function setApplicationID($applicationID)
+    {
+        $this->applicationID = $applicationID;
+
+        return $this;
+    }
+
+    /**
+     * Retrieves the partner ID
+     *
+     * @return mixed Partner ID
+     */
+    public function getPartnerID()
+    {
+        return $this->partnerID;
+    }
+
+    /**
+     * Sets the partner ID.
+     *
+     * @param mixed $partnerID The partner ID to set.
+     * @return $this
+     */
+    public function setPartnerID($partnerID)
+    {
+        $this->partnerID = $partnerID;
+
+        return $this;
     }
 }

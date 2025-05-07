@@ -28,7 +28,8 @@ class Purchase extends Base
      */
     private $customer;
     private $url_ok, $url_cancel, $url_notify;
-    private $currency = 'EUR', $note, $orderID, $cardTokenRequest, $paymentParametersRequired;
+    private $currency = 'EUR', $note, $orderID, $cardTokenRequest, $paymentParametersRequired, $expiresIn = '86400';
+    private $applicationID, $partnerID;
     private $paymentMethod;
 
     /**
@@ -119,6 +120,58 @@ class Purchase extends Base
     }
 
     /**
+     *
+     * @param $expiresIn
+     * @return Purchase
+     */
+    public function setExpiresIn($expiresIn)
+    {
+        $this->expiresIn = $expiresIn;
+
+        return $this;
+    }
+
+    public function getExpiresIn()
+    {
+        return $this->expiresIn;
+    }
+
+    /**
+     * Set partner application ID
+     * @param $applicationID
+     * @return $this
+     */
+    public function setApplicationID($applicationID)
+    {
+        $this->applicationID = $applicationID;
+
+        return $this;
+    }
+
+    public function getApplicationID()
+    {
+        return $this->applicationID;
+    }
+
+    /**
+     * Set partner ID
+     * @param $partnerID
+     * @return $this
+     */
+    public function setPartnerID($partnerID)
+    {
+        $this->partnerID = $partnerID;
+
+        return $this;
+    }
+
+    public function getPartnerID()
+    {
+        return $this->partnerID;
+    }
+
+
+    /**
      * Initiate API request
      *
      * @return boolean
@@ -147,6 +200,11 @@ class Purchase extends Base
         $this->_addPostParam('URL_Notify', $this->getUrlNotify());
 
         $this->_addPostParam('Note', $this->getNote());
+        $this->_addPostParam('expires_in', $this->getExpiresIn());
+
+        // Add partner details
+        $this->_addPostParam('ApplicationID', $this->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getPartnerID());
 
         $this->_addPostParam('customeremail', $this->getCustomer()->getEmail());
         $this->_addPostParam('customerphone', $this->getCustomer()->getPhone());
@@ -259,6 +317,14 @@ class Purchase extends Base
             } catch (\Exception $ex) {
                 throw new IPC_Exception('Invalid Customer details: ' . $ex->getMessage());
             }
+        }
+
+        if ($this->getPartnerID() == null){
+            throw new IPC_Exception('Required parameter: Partner ID');
+        }
+
+        if ($this->getApplicationID() == null){
+            throw new IPC_Exception('Required parameter: Application ID');
         }
 
         return true;
