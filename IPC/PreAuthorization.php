@@ -188,12 +188,14 @@ class PreAuthorization extends Base
             throw new IPC_Exception('Invalid Config details: ' . $ex->getMessage());
         }
 
-        if ($this->getPartnerID() == null){
-            throw new IPC_Exception('Required parameter: Partner ID');
-        }
+        if ($this->getCnf()->getVersion() === '1.4.1') {
+            if ($this->getPartnerID() == null) {
+                throw new IPC_Exception('Required parameter: Partner ID');
+            }
 
-        if ($this->getApplicationID() == null){
-            throw new IPC_Exception('Required parameter: Application ID');
+            if ($this->getApplicationID() == null) {
+                throw new IPC_Exception('Required parameter: Application ID');
+            }
         }
 
         return true;

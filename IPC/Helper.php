@@ -182,9 +182,14 @@ class Helper
      */
     public static function escape($text)
     {
-        $text = htmlspecialchars_decode($text, ENT_QUOTES);
+        if ($text !== null){
+            $text = htmlspecialchars_decode($text, ENT_QUOTES);
 
-        return htmlspecialchars($text, ENT_QUOTES);
+            return htmlspecialchars($text, ENT_QUOTES);
+        }else{
+            return $text;
+        }
+
     }
 
     /**
@@ -196,7 +201,11 @@ class Helper
      */
     public static function unescape($text)
     {
-        return htmlspecialchars_decode($text, ENT_QUOTES);
+        if ($text !== null){
+            return htmlspecialchars_decode($text, ENT_QUOTES);
+        }else{
+            return $text;
+        }
     }
 
     /**

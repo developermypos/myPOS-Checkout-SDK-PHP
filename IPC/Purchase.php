@@ -202,9 +202,11 @@ class Purchase extends Base
         $this->_addPostParam('Note', $this->getNote());
         $this->_addPostParam('expires_in', $this->getExpiresIn());
 
-        // Add partner details
-        $this->_addPostParam('ApplicationID', $this->getApplicationID());
-        $this->_addPostParam('PartnerID', $this->getPartnerID());
+        if ($this->getCnf()->getVersion() === '1.4.1') {
+            // Add partner details
+            $this->_addPostParam('ApplicationID', $this->getApplicationID());
+            $this->_addPostParam('PartnerID', $this->getPartnerID());
+        }
 
         $this->_addPostParam('customeremail', $this->getCustomer()->getEmail());
         $this->_addPostParam('customerphone', $this->getCustomer()->getPhone());
@@ -319,12 +321,14 @@ class Purchase extends Base
             }
         }
 
-        if ($this->getPartnerID() == null){
-            throw new IPC_Exception('Required parameter: Partner ID');
-        }
+        if ($this->getCnf()->getVersion() === '1.4.1'){
+            if ($this->getPartnerID() == null){
+                throw new IPC_Exception('Required parameter: Partner ID');
+            }
 
-        if ($this->getApplicationID() == null){
-            throw new IPC_Exception('Required parameter: Application ID');
+            if ($this->getApplicationID() == null){
+                throw new IPC_Exception('Required parameter: Application ID');
+            }
         }
 
         return true;
