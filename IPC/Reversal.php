@@ -9,7 +9,6 @@ namespace Mypos\IPC;
 class Reversal extends Base
 {
     private $trnref;
-    private $partnerID, $applicationID;
 
     /**
      * Return Refund object
@@ -40,8 +39,8 @@ class Reversal extends Base
         $this->_addPostParam('Source', $this->getCnf()->getSource());
         $this->_addPostParam('IPC_Trnref', $this->getTrnref());
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
-        $this->_addPostParam('ApplicationID', $this->getApplicationID());
-        $this->_addPostParam('PartnerID', $this->getPartnerID());
+        $this->_addPostParam('ApplicationID', $this->getCnf()->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getCnf()->getPartnerID());
 
         return $this->_processPost();
     }
@@ -69,11 +68,11 @@ class Reversal extends Base
         }
 
         if ($this->getCnf()->getVersion() === '1.4.1') {
-            if ($this->getPartnerID() == null) {
+            if ($this->getCnf()->getPartnerID() == null) {
                 throw new IPC_Exception('Required parameter: Partner ID');
             }
 
-            if ($this->getApplicationID() == null) {
+            if ($this->getCnf()->getApplicationID() == null) {
                 throw new IPC_Exception('Required parameter: Application ID');
             }
         }
@@ -105,51 +104,4 @@ class Reversal extends Base
         return $this;
     }
 
-    /**
-     * Gets the application identifier
-     *
-     * @return mixed
-     */
-    public function getApplicationID()
-    {
-        return $this->applicationID;
-    }
-
-    /**
-     * Sets the application identifier.
-     *
-     * @param string $applicationID Application unique identifier.
-     *
-     * @return $this
-     */
-    public function setApplicationID($applicationID)
-    {
-        $this->applicationID = $applicationID;
-
-        return $this;
-    }
-
-    /**
-     * Gets the partner identifier
-     *
-     * @return mixed
-     */
-    public function getPartnerID()
-    {
-        return $this->partnerID;
-    }
-
-    /**
-     * Sets the partner identifier
-     *
-     * @param string $partnerID
-     *
-     * @return $this
-     */
-    public function setPartnerID($partnerID)
-    {
-        $this->partnerID = $partnerID;
-
-        return $this;
-    }
 }

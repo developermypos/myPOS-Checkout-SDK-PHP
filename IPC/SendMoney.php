@@ -9,7 +9,6 @@ namespace Mypos\IPC;
 class SendMoney extends Base
 {
     private $currency = 'EUR', $amount, $orderID, $customerWalletNumber, $reason;
-    private $applicationID, $partnerID;
 
     /**
      * Return Refund object
@@ -92,8 +91,8 @@ class SendMoney extends Base
         $this->_addPostParam('Reason', $this->getReason());
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
 
-        $this->_addPostParam('ApplicationID', $this->getApplicationID());
-        $this->_addPostParam('PartnerID', $this->getPartnerID());
+        $this->_addPostParam('ApplicationID', $this->getCnf()->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getCnf()->getPartnerID());
 
         return $this->_processPost();
     }
@@ -129,11 +128,11 @@ class SendMoney extends Base
         }
 
         if ($this->getCnf()->getVersion() === '1.4.1') {
-            if ($this->getPartnerID() == null) {
+            if ($this->getCnf()->getPartnerID() == null) {
                 throw new IPC_Exception('Required parameter: Partner ID');
             }
 
-            if ($this->getApplicationID() == null) {
+            if ($this->getCnf()->getApplicationID() == null) {
                 throw new IPC_Exception('Required parameter: Application ID');
             }
         }
@@ -205,49 +204,4 @@ class SendMoney extends Base
         return $this->reason;
     }
 
-    /**
-     * Set the application ID
-     *
-     * @param $applicationID
-     * @return $this
-     */
-    public function setApplicationID($applicationID)
-    {
-        $this->applicationID = $applicationID;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the application ID
-     *
-     * @return mixed
-     */
-    public function getApplicationID()
-    {
-        return $this->applicationID;
-    }
-
-    /**
-     * Set the partner ID
-     *
-     * @param $partnerID
-     * @return $this
-     */
-    public function setPartnerID($partnerID)
-    {
-        $this->partnerID = $partnerID;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the partner ID
-     *
-     * @return mixed
-     */
-    public function getPartnerID()
-    {
-        return $this->partnerID;
-    }
 }

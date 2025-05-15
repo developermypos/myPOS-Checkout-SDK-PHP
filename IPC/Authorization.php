@@ -13,8 +13,6 @@ class Authorization extends Base
      */
     private $card;
     private $currency = 'EUR', $note, $orderID, $itemName, $amount;
-    private $applicationID, $partnerID;
-
 
     /**
      * Return purchase object
@@ -111,52 +109,6 @@ class Authorization extends Base
     }
 
     /**
-     * Set application ID
-     * @param $applicationID
-     * @return $this
-     */
-    public function setApplicationID($applicationID)
-    {
-        $this->applicationID = $applicationID;
-
-        return $this;
-    }
-
-    /**
-     * Get application ID
-     *
-     * @return mixed
-     */
-    public function getApplicationID()
-    {
-        return $this->applicationID;
-    }
-
-    /**
-     * Set Partner ID
-     *
-     * @param mixed $partnerID
-     *
-     * @return Authorization
-     */
-    public function setPartnerID($partnerID)
-    {
-        $this->partnerID = $partnerID;
-
-        return $this;
-    }
-
-    /**
-     * Get Partner ID
-     *
-     * @return mixed
-     */
-    public function getPartnerID()
-    {
-        return $this->partnerID;
-    }
-
-    /**
      * Initiate API request
      *
      * @return Response
@@ -186,8 +138,8 @@ class Authorization extends Base
         $this->_addPostParam('Note', $this->getNote());
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
 
-        $this->_addPostParam('ApplicationID', $this->getApplicationID());
-        $this->_addPostParam('PartnerID', $this->getPartnerID());
+        $this->_addPostParam('ApplicationID', $this->getCnf()->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getCnf()->getPartnerID());
 
         return $this->_processPost();
     }
@@ -237,11 +189,11 @@ class Authorization extends Base
         }
 
         if ($this->getCnf()->getVersion() === '1.4.1') {
-            if ($this->getPartnerID() == null) {
+            if ($this->getCnf()->getPartnerID() == null) {
                 throw new IPC_Exception('Required parameter: Partner ID');
             }
 
-            if ($this->getApplicationID() == null) {
+            if ($this->getCnf()->getApplicationID() == null) {
                 throw new IPC_Exception('Required parameter: Application ID');
             }
         }

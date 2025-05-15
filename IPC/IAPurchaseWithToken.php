@@ -23,8 +23,6 @@ class IAPurchaseWithToken extends Base
     private $allowPaymentWithoutTdsReferenceID = false;
     private $tdsReferenceID;
     private $managerSid;
-    private $applicationID;
-    private $partnerID;
 
     /**
      * Return purchase object
@@ -221,52 +219,6 @@ class IAPurchaseWithToken extends Base
     }
 
     /**
-     * Application ID
-     *
-     * @return mixed
-     */
-    public function getApplicationID()
-    {
-        return $this->applicationID;
-    }
-
-    /**
-     * Application ID
-     *
-     * @param $applicationID
-     * @return $this
-     */
-    public function setApplicationID($applicationID)
-    {
-        $this->applicationID = $applicationID;
-
-        return $this;
-    }
-
-    /**
-     * Partner ID
-     *
-     * @return mixed
-     */
-    public function getPartnerID()
-    {
-        return $this->partnerID;
-    }
-
-    /**
-     * Partner ID
-     *
-     * @param $partnerID
-     * @return $this
-     */
-    public function setPartnerID($partnerID)
-    {
-        $this->partnerID = $partnerID;
-
-        return $this;
-    }
-
-    /**
      * Initiate API request
      *
      * @return Response
@@ -312,8 +264,8 @@ class IAPurchaseWithToken extends Base
             $i++;
         }
 
-        $this->_addPostParam('ApplicationID', $this->getApplicationID());
-        $this->_addPostParam('PartnerID', $this->getPartnerID());
+        $this->_addPostParam('ApplicationID', $this->getCnf()->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getCnf()->getPartnerID());
 
         return $this->_processPost();
     }
@@ -361,11 +313,11 @@ class IAPurchaseWithToken extends Base
         }
 
         if ($this->getCnf()->getVersion() === '1.4.1') {
-            if ($this->getPartnerID() == null) {
+            if ($this->getCnf()->getPartnerID() == null) {
                 throw new IPC_Exception('Required parameter: Partner ID');
             }
 
-            if ($this->getApplicationID() == null) {
+            if ($this->getCnf()->getApplicationID() == null) {
                 throw new IPC_Exception('Required parameter: Application ID');
             }
         }

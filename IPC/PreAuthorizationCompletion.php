@@ -9,7 +9,6 @@ namespace Mypos\IPC;
 class PreAuthorizationCompletion extends Base
 {
     private $currency = 'EUR', $orderID, $amount;
-    private $applicationID, $partnerID;
 
     /**
      * Return purchase object
@@ -87,8 +86,8 @@ class PreAuthorizationCompletion extends Base
         $this->_addPostParam('Currency', $this->getCurrency());
         
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
-        $this->_addPostParam('ApplicationID', $this->getApplicationID());
-        $this->_addPostParam('PartnerID', $this->getPartnerID());
+        $this->_addPostParam('ApplicationID', $this->getCnf()->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getCnf()->getPartnerID());
 
         return $this->_processPost();
     }
@@ -120,11 +119,11 @@ class PreAuthorizationCompletion extends Base
         }
 
         if ($this->getCnf()->getVersion() === '1.4.1') {
-            if ($this->getPartnerID() == null) {
+            if ($this->getCnf()->getPartnerID() == null) {
                 throw new IPC_Exception('Required parameter: Partner ID');
             }
 
-            if ($this->getApplicationID() == null) {
+            if ($this->getCnf()->getApplicationID() == null) {
                 throw new IPC_Exception('Required parameter: Application ID');
             }
         }
@@ -162,50 +161,4 @@ class PreAuthorizationCompletion extends Base
         return $this->amount;
     }
 
-    /**
-     * Application ID
-     *
-     * @return mixed
-     */
-    public function getApplicationID()
-    {
-        return $this->applicationID;
-    }
-
-    /**
-     * Sets the application ID.
-     *
-     * @param mixed $applicationID The ID of the application.
-     *
-     * @return self
-     */
-    public function setApplicationID($applicationID)
-    {
-        $this->applicationID = $applicationID;
-        return $this;
-
-    }
-
-    /**
-     * Retrieves the partner ID.
-     *
-     * @return mixed
-     */
-    public function getPartnerID()
-    {
-        return $this->partnerID;
-    }
-
-    /**
-     * Sets the partner ID.
-     *
-     * @param mixed $partnerID
-     *
-     * @return self
-     */
-    public function setPartnerID($partnerID)
-    {
-        $this->partnerID = $partnerID;
-        return $this;
-    }
 }

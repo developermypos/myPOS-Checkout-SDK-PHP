@@ -29,7 +29,6 @@ class Purchase extends Base
     private $customer;
     private $url_ok, $url_cancel, $url_notify;
     private $currency = 'EUR', $note, $orderID, $cardTokenRequest, $paymentParametersRequired, $expiresIn = '86400';
-    private $applicationID, $partnerID;
     private $paymentMethod;
 
     /**
@@ -137,41 +136,6 @@ class Purchase extends Base
     }
 
     /**
-     * Set partner application ID
-     * @param $applicationID
-     * @return $this
-     */
-    public function setApplicationID($applicationID)
-    {
-        $this->applicationID = $applicationID;
-
-        return $this;
-    }
-
-    public function getApplicationID()
-    {
-        return $this->applicationID;
-    }
-
-    /**
-     * Set partner ID
-     * @param $partnerID
-     * @return $this
-     */
-    public function setPartnerID($partnerID)
-    {
-        $this->partnerID = $partnerID;
-
-        return $this;
-    }
-
-    public function getPartnerID()
-    {
-        return $this->partnerID;
-    }
-
-
-    /**
      * Initiate API request
      *
      * @return boolean
@@ -203,8 +167,8 @@ class Purchase extends Base
         $this->_addPostParam('expires_in', $this->getExpiresIn());
 
         // Add partner details
-        $this->_addPostParam('ApplicationID', $this->getApplicationID());
-        $this->_addPostParam('PartnerID', $this->getPartnerID());
+        $this->_addPostParam('ApplicationID', $this->getCnf()->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getCnf()->getPartnerID());
 
         $this->_addPostParam('customeremail', $this->getCustomer()->getEmail());
         $this->_addPostParam('customerphone', $this->getCustomer()->getPhone());
