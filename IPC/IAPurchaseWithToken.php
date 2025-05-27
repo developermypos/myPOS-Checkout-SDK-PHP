@@ -251,6 +251,9 @@ class IAPurchaseWithToken extends Base
         $this->_addPostParam('Note', $this->getNote());
         $this->_addPostParam('OutputFormat', $this->getOutputFormat());
 
+        $this->_addPostParam('ApplicationID', $this->getCnf()->getApplicationID());
+        $this->_addPostParam('PartnerID', $this->getCnf()->getPartnerID());
+
         $this->_addPostParam('CartItems', $this->getCart()->getItemsCount());
         $items = $this->getCart()->getCart();
         $i = 1;
@@ -263,9 +266,6 @@ class IAPurchaseWithToken extends Base
             $this->_addPostParam('Currency_'.$i, $this->getCurrency());
             $i++;
         }
-
-        $this->_addPostParam('ApplicationID', $this->getCnf()->getApplicationID());
-        $this->_addPostParam('PartnerID', $this->getCnf()->getPartnerID());
 
         return $this->_processPost();
     }
@@ -312,12 +312,12 @@ class IAPurchaseWithToken extends Base
             throw new IPC_Exception('Missing TdsReferenceID');
         }
 
-        if ($this->getCnf()->getVersion() === '1.4.1') {
-            if ($this->getCnf()->getPartnerID() == null) {
+        if ($this->getCnf()->getVersion() === '1.4.1'){
+            if ($this->getCnf()->getPartnerID() == null){
                 throw new IPC_Exception('Required parameter: Partner ID');
             }
 
-            if ($this->getCnf()->getApplicationID() == null) {
+            if ($this->getCnf()->getApplicationID() == null){
                 throw new IPC_Exception('Required parameter: Application ID');
             }
         }

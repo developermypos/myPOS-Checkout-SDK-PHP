@@ -284,11 +284,11 @@ class Purchase extends Base
         }
 
         if ($this->getCnf()->getVersion() === '1.4.1'){
-            if ($this->getPartnerID() == null){
+            if ($this->getCnf()->getPartnerID() == null){
                 throw new IPC_Exception('Required parameter: Partner ID');
             }
 
-            if ($this->getApplicationID() == null){
+            if ($this->getCnf()->getApplicationID() == null){
                 throw new IPC_Exception('Required parameter: Application ID');
             }
         }
