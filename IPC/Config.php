@@ -18,8 +18,8 @@ class Config
     private $ipc_url = 'https://www.mypos.com/vmp/checkout';
     private $developerKey;
     private $source;
-    private $applicationID;
-    private $partnerID;
+    private $applicationID = '';
+    private $partnerID = '';
 
     /**
      * Config constructor.
